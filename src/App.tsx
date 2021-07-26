@@ -1,25 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import NavBar from "./components/navbar";
+import { ChakraProvider } from "@chakra-ui/react";
+import Footer from "./components/Footer";
+import { Router } from "@reach/router";
+import Login from "./pages/login";
+import SignUp from "./pages/SignUp";
+import Home from "./pages/home";
+import { SIGN_UP, LOG_IN } from "./constants/appConstants";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <NavBar />
+      <Router>
+        <Home path="/" />
+        <Login path={LOG_IN} />
+        <SignUp path={SIGN_UP} />
+      </Router>
+      <Footer />
+    </ChakraProvider>
   );
 }
 
