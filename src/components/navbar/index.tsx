@@ -6,16 +6,19 @@ import {
   Text,
   Stack,
   useColorMode,
+  Button,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import NavBarContainer from "../../containers/navbar";
-import { APP_NAME } from "../../constants/appConstants";
+import { APP_NAME, COLOR_SCHEME } from "../../constants/appConstants";
 import ThemeSwitch from "../ThemeSwitch";
 import { menu } from "../../utils/menu";
 import { CloseIcon } from "@chakra-ui/icons";
+import { useAuth } from "../../contexts/AuthProvider";
 
 function NavBar(props: any) {
   const [isOpen, setIsOpen] = useState(false);
+
   const toggle = () => setIsOpen(!isOpen);
   return (
     <NavBarContainer {...props}>
@@ -31,6 +34,8 @@ function NavBar(props: any) {
 }
 
 const MenuLinks = ({ isOpen }) => {
+  const { user, signOut } = useAuth();
+  console.log(user);
   return (
     <Box
       display={{ base: isOpen ? "block" : "none", md: "block" }}
@@ -43,11 +48,17 @@ const MenuLinks = ({ isOpen }) => {
         direction={["column", "row", "row", "row"]}
         pt={[4, 4, 0, 0]}
       >
-        {menu.map((edge) => (
-          <MenuItem to={edge.link} key={edge.key} isLast={edge.isLast}>
-            {edge.name}
-          </MenuItem>
-        ))}
+        {user && user.aud === "authenticated" ? (
+          <Button colorScheme={COLOR_SCHEME} onClick={() => signOut()}>
+            Sign Out
+          </Button>
+        ) : (
+          menu.map((edge) => (
+            <MenuItem to={edge.link} key={edge.key} isLast={edge.isLast}>
+              {edge.name}
+            </MenuItem>
+          ))
+        )}
         <ThemeSwitch />
       </Stack>
     </Box>
